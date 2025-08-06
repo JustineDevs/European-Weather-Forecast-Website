@@ -14,15 +14,15 @@ A modern, responsive weather forecast website for a European travel agency that 
 ## 📸 Showcase Screenshots
 
 ### Main Interface
-![Main Interface](png_1.png)
+![Main Interface](public/png_1.png)
 *Clean, modern interface with city selection and weather forecast display*
 
 ### Weather Forecast Display
-![Weather Forecast](png_2.png)
+![Weather Forecast](public/png_2.png)
 *7-day weather forecast for London, UK with detailed weather information*
 
 ### Madrid Weather Example
-![Madrid Weather](png_3.png)
+![Madrid Weather](public/png_3.png)
 *Weather forecast for Madrid, Spain showing different weather conditions*
 
 ## 🏙️ Supported Cities
@@ -64,9 +64,10 @@ A modern, responsive weather forecast website for a European travel agency that 
 ├── main.js            # JavaScript functionality
 ├── test.html          # API testing page
 ├── README.md          # Project documentation
-├── png_1.png         # Main interface screenshot
-├── png_2.png         # Weather forecast screenshot
-└── png_3.png         # Madrid weather example
+├── public/
+│   ├── png_1.png     # Main interface screenshot
+│   ├── png_2.png     # Weather forecast screenshot
+│   └── png_3.png     # Madrid weather example
 ```
 
 ## 🚀 Getting Started
