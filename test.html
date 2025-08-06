@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Test - 7Timer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        pre {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        .success { color: #28a745; }
+        .error { color: #dc3545; }
+    </style>
+</head>
+<body>
+    <h1>7Timer API Test</h1>
+    
+    <div class="test-section">
+        <h2>Test API Connection</h2>
+        <p>This test will verify that the 7Timer API is working correctly.</p>
+        <button onclick="testAPI()">Test API</button>
+        <div id="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test London Weather</h2>
+        <p>Fetch weather data for London, UK (coordinates: 51.5074, -0.1278)</p>
+        <button onclick="testLondonWeather()">Get London Weather</button>
+        <div id="londonResult"></div>
+    </div>
+
+    <script>
+        async function testAPI() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<p>Testing API connection...</p>';
+            
+            try {
+                const response = await fetch('http://www.7timer.info/bin/api.pl?lon=-0.1278&lat=51.5074&product=civil&output=json');
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                resultDiv.innerHTML = `
+                    <p class="success">✅ API connection successful!</p>
+                    <p>Response received with ${data.dataseries ? data.dataseries.length : 0} data points</p>
+                    <details>
+                        <summary>View Raw Response</summary>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    </details>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <p class="error">❌ API test failed: ${error.message}</p>
+                    <p>This might be due to CORS restrictions or network issues.</p>
+                `;
+            }
+        }
+
+        async function testLondonWeather() {
+            const resultDiv = document.getElementById('londonResult');
+            resultDiv.innerHTML = '<p>Fetching London weather data...</p>';
+            
+            try {
+                const response = await fetch('http://www.7timer.info/bin/api.pl?lon=-0.1278&lat=51.5074&product=civil&output=json');
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                if (data.dataseries && data.dataseries.length > 0) {
+                    const firstDay = data.dataseries[0];
+                    const date = new Date();
+                    date.setDate(date.getDate() + firstDay.timepoint);
+                    
+                    resultDiv.innerHTML = `
+                        <p class="success">✅ London weather data received!</p>
+                        <p><strong>Date:</strong> ${date.toLocaleDateString()}</p>
+                        <p><strong>Temperature:</strong> ${firstDay.temp2m}°C</p>
+                        <p><strong>Weather:</strong> ${firstDay.weather}</p>
+                        <p><strong>Humidity:</strong> ${firstDay.rh2m}%</p>
+                        <p><strong>Wind Speed:</strong> ${firstDay.wind10m.speed} km/h</p>
+                        <details>
+                            <summary>View Full Response</summary>
+                            <pre>${JSON.stringify(data, null, 2)}</pre>
+                        </details>
+                    `;
+                } else {
+                    resultDiv.innerHTML = '<p class="error">❌ No weather data received</p>';
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <p class="error">❌ Failed to fetch London weather: ${error.message}</p>
+                `;
+            }
+        }
+    </script>
+</body>
+</html> 
